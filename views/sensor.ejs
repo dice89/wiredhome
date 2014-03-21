@@ -1,0 +1,95 @@
+<!DOCTYPE>
+<html>
+	<head>
+	<title><%= title %></title>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/rickshaw.css">
+	<script src="/javascripts/vendor/d3.min.js"></script>
+	<script src="/javascripts/vendor/d3.layout.min.js"></script>
+	<script src="/javascripts/rickshaw.js"></script>
+	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+
+	<script type="text/javascript">
+
+	$.getJSON('http://localhost:3000/sensorWS/532aab9a65251373245d3777', function(res){
+
+	var temp = [];
+
+	var newElement = {};
+	res.temp.forEach(function(element){
+		newElement = {};
+		newElement.y = element.y;
+		newElement.x = parseInt (new Date(element.x).getTime()/1000);
+		temp.push(newElement);
+	});
+
+	var humidity = [];
+	res.humidity.forEach(function(element){
+		newElement = {};
+		newElement.y = element.y;
+		newElement.x = parseInt(new Date(element.x).getTime()/1000);
+		humidity.push(newElement);
+	});
+
+	var graph = new Rickshaw.Graph( {
+		element:document.getElementById("chart"),
+		width: 800,
+		height: 500,
+		renderer: 'line',
+		series: [
+		{
+			color: "#c05020",
+			data: temp,
+			name: 'Temperature'
+		}, {
+			color: "#30c020",
+			data: humidity,
+			name: 'Humidity'
+		}
+	]
+	} );
+	graph.render();
+
+	var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+		graph: graph
+	} );
+
+	var legend = new Rickshaw.Graph.Legend( {
+		graph: graph,
+		element: document.getElementById('legend')
+
+	} );
+
+	var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+		graph: graph,
+		legend: legend
+	} );
+
+	var axes = new Rickshaw.Graph.Axis.Time( {
+		graph: graph
+	} );
+	axes.render();
+
+
+	})
+
+
+	</script>
+	</head>
+	<body>
+		<% include menu %>
+		<h1><%= title %></h1>
+		<% include messages %>
+
+<div id="chart_container">
+	<div id="chart"></div>
+	<div id="legend_container">
+		<div id="smoother" title="Smoothing"></div>
+		<div id="legend"></div>
+	</div>
+	<div id="slider"></div>
+</div>
+
+		
+	</body>
+</html>
