@@ -1,0 +1,18 @@
+<!DOCTYPE>
+<html>
+	<head>
+	<title><%= title %></title>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	</head>
+	<body>
+		<% include ../menu %>
+		<h1><%= title %></h1>
+		<p>Here you find a list of all sensor registered for you!</p>
+		<% include ../messages %>
+			<% sensors.forEach(function(sensor){ %>
+				<p>
+					<a href = /sensor/show/<%= sensor.id %> > <%= sensor.location %> of type  <%= sensor.type %></a>
+				</p>
+			<%	}) %>	
+	</body>
+</html>

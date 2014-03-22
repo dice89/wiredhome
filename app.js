@@ -31,7 +31,7 @@ app.use(user);
 app.use(messages());
 app.use(app.router);
 
-app.locals.dbconnection = mongoose.connect('mongodb://localhost/shoutbox');
+app.locals.dbconnection = mongoose.connect('mongodb://localhost/wiredhome');
 
 // development only
 if ('development' == app.get('env')) {
@@ -49,11 +49,24 @@ app.get('/login', login.form);
 app.post('/login', login.submit);
 app.get('/logout',login.logout);
 
+//TODO build middleware that secures sensor path so it's only available after login
 
-app.post('/updatesensor', sensor.postsensordata);
-app.post('/registersensor', sensor.registersensor);
-app.get('/sensor/:sensorid', sensor.showsensordata);
-app.get('/sensorws/:sensorid', sensor.showsensordataWS);
+//sensor ui stuff
+app.get('/sensor/show/:sensorid', sensor.showSensor);
+//Sensor registration for user
+app.get('/sensor/registeruser', sensor.showRegisterSensorForUser);
+app.post('/sensor/registeruser', sensor.registersensorforUser);
+//Sensor overview for user
+app.get('/sensor', sensor.showSensors);
+
+//sensor api stuff
+app.post('/api/updatesensor', sensor.receiveSensorData);
+app.post('/api/registersensor', sensor.registersensor);
+app.get('/api/getsensordata/:sensorid', sensor.getsensordata );
+
+
+
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

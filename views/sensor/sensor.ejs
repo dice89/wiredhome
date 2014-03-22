@@ -11,25 +11,23 @@
 
 	<script type="text/javascript">
 
-	$.getJSON('http://localhost:3000/sensorWS/532aab9a65251373245d3777', function(res){
+	$.getJSON('/api/getsensordata/<%= id %>', function(res){
 
-	var temp = [];
+	console.log(res);
+
+	var graph_elements = [];
 
 	var newElement = {};
-	res.temp.forEach(function(element){
+	res.forEach(function(element){
 		newElement = {};
-		newElement.y = element.y;
-		newElement.x = parseInt (new Date(element.x).getTime()/1000);
-		temp.push(newElement);
+		newElement.y = element.value;
+		newElement.x = parseInt (new Date(element.timestamp).getTime()/1000);
+		graph_elements.push(newElement);
+
+		console.log( parseInt (new Date(element.timestamp).getTime()/1000));
 	});
 
-	var humidity = [];
-	res.humidity.forEach(function(element){
-		newElement = {};
-		newElement.y = element.y;
-		newElement.x = parseInt(new Date(element.x).getTime()/1000);
-		humidity.push(newElement);
-	});
+
 
 	var graph = new Rickshaw.Graph( {
 		element:document.getElementById("chart"),
@@ -39,14 +37,10 @@
 		series: [
 		{
 			color: "#c05020",
-			data: temp,
+			data: graph_elements,
 			name: 'Temperature'
-		}, {
-			color: "#30c020",
-			data: humidity,
-			name: 'Humidity'
 		}
-	]
+		]
 	} );
 	graph.render();
 
@@ -73,13 +67,13 @@
 
 	})
 
-
+	
 	</script>
 	</head>
 	<body>
-		<% include menu %>
+		<% include ../menu %>
 		<h1><%= title %></h1>
-		<% include messages %>
+		<% include ../messages %>
 
 <div id="chart_container">
 	<div id="chart"></div>

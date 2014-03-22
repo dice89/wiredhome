@@ -1,0 +1,28 @@
+<!DOCTYPE>
+<html>
+	<head>
+	<title><%= title %></title>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	</head>
+	<body>
+		<% include ../menu %>
+		<h1><%= title %></h1>
+		<p>Fill in the form below to register a sensor for your user (you need to know the identifier of the Sensor)</p>
+		<% include ../messages %>
+
+		<form action='/sensor/registeruser' method='post'>
+			<p>
+				<input type='text' name='sensor[id]' placeholder ='Sensor Identifier' />
+			</p>
+			<p>
+				<input type='text' name='sensor[location]' placeholder ='Sensor Location e.g Dining Room' />
+			</p>
+				<p>
+				<input type='hidden' name='sensor[user]' value= <%= username %> />
+			</p>
+			<p>
+				<input type='submit' value='Register Sensor!'/>
+			</p>
+		</form>
+	</body>
+</html>
